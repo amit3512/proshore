@@ -299,6 +299,8 @@ function App() {
               pagination={true}
               scroll={{ x: 400 }}
               loading={loading}
+              sticky
+              showHeader
             />
           </Card>
         </Layout.Content>
