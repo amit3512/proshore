@@ -1,7 +1,7 @@
 import React from "react";
 
 function SingleRepoDetail() {
-  return <>Hello World</>;
+  return <>Hello Repository Detail!!</>;
 }
 
 export default SingleRepoDetail;

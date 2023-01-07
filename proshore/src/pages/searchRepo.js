@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 import Moment from "react-moment";
 import axios from "axios";
-import { Button, Card, Input, Layout, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Input,
+  Layout,
+  Modal,
+  Row,
+  Spin,
+  Typography,
+} from "antd";
 import {
   UserOutlined,
   StarOutlined,
@@ -14,28 +25,84 @@ import {
 } from "@ant-design/icons";
 
 import * as SORTER from "../utils/sorter";
-import { StyledTable, StyledSearchLayout } from "../table/tableStyle";
+import { StyledTable, StyledSearchLayout } from "../style/tableStyle";
+import SingleRepoModal from "../components/singleRepoModal";
+
+const baseUrl = "https://api.github.com/search/repositories";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
+
 function App() {
   //states
   const [repositories, setRepository] = useState([]);
   const [selectedSearchedQuery, setSearchedQuery] = useState();
-  console.log("repositories", repositories);
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRepo, setSelectedRepo] = useState();
+  const [selectedRepoName, setSelectedRepoName] = useState();
+  const [selectedAuthor, setSelectedRepoAuthor] = useState();
+  const [selectedRepoStar, setSelectedRepoStar] = useState();
+  const [selectedRepoWatchers, setSelectedRepoWatchers] = useState();
+  const [selectedRepoFork, setSelectedRepoFork] = useState();
+  const [selectedRepoDescription, setSelectedRepoDescription] = useState();
+  const [selectedRepoUpdated, setSelectedRepoUpdated] = useState();
+  const [selectedOpenIssue, setSelectedRepoOpenIssue] = useState();
+  const [selectedDefaultBranch, setSelectedRepoDefaultBranch] = useState();
 
   //functions
   async function getAllRepositories() {
+    setLoading(true);
     const response = await axios.get(
-      `https://api.github.com/search/repositories?q=${selectedSearchedQuery}&per_page=300`
+      `${baseUrl}?q=${selectedSearchedQuery}&per_page=300`
     );
     setRepository(response?.data?.items);
+    setLoading(false);
   }
 
   //useEffects
   useEffect(() => {
+    setRepository();
     getAllRepositories();
   }, [selectedSearchedQuery]);
+
+  //function variables
+  const showModal = (
+    repo_id,
+    repo_title,
+    repo_author,
+    repo_star,
+    repo_watchers,
+    repo_fork,
+    repo_description,
+    repo_updated,
+    repo_open_issue,
+    repo_default_branch
+  ) => {
+    setIsModalOpen(true);
+    setSelectedRepo(repo_id);
+    setSelectedRepoName(repo_title);
+    setSelectedRepoAuthor(repo_author);
+    setSelectedRepoStar(repo_star);
+    setSelectedRepoWatchers(repo_watchers);
+    setSelectedRepoFork(repo_fork);
+    setSelectedRepoDescription(repo_description);
+    setSelectedRepoUpdated(repo_updated);
+    setSelectedRepoOpenIssue(repo_open_issue);
+    setSelectedRepoDefaultBranch(repo_default_branch);
+  };
+
+  const onSearch = (value) => setSearchedQuery(value);
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setSelectedRepo();
+  };
+
+  // const handleOk = () => {
+  //   setIsModalOpen(false);
+  //   setSelectedRepo();
+  // };
 
   //additional varaibles data
   const columnsRepo = [
@@ -80,7 +147,7 @@ function App() {
     {
       title: (
         <Text style={{ color: "white" }}>
-          <StarOutlined /> Number of Stars
+          <StarOutlined /> Star
         </Text>
       ),
       key: "no_of_stars",
@@ -168,33 +235,40 @@ function App() {
           <Moment format="YYYY/MM/DD">{repo?.updated_at}</Moment>
         ),
         action: (
-          <Button style={{ background: "#ffa500", color: "#fff" }}>
+          <Button
+            style={{ background: "#ffa500", color: "#fff" }}
+            onClick={() =>
+              showModal(
+                repo?.id,
+                repo?.full_name,
+                repo?.full_name.split("/")?.[0],
+                repo?.stargazers_count,
+                repo?.watchers_count,
+                repo?.forks_count,
+                repo?.description,
+                repo?.updated_at,
+                repo?.open_issues_count,
+                repo?.default_branch
+              )
+            }
+          >
             {" "}
-            <a
+            {/* <a
               href={`/repo/${repo?.id}`}
               style={{ color: "#fff" }}
               target="_blank"
               rel="noreferrer"
-            >
-              View Details
-            </a>
+            > */}
+            View Details
+            {/* </a> */}
           </Button>
         ),
       };
     });
 
-  const onSearch = (value) => setSearchedQuery(value);
-
   return (
     <>
-      <StyledSearchLayout
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          textAlign: "center",
-          margin: " 0.9em 0 0.9em 0",
-        }}
-      >
+      <StyledSearchLayout>
         <Card
           title={
             <Title level={4} style={{ color: "#fff" }}>
@@ -213,6 +287,7 @@ function App() {
           />
         </Card>
       </StyledSearchLayout>
+
       {selectedSearchedQuery && (
         <Layout.Content>
           <Card>
@@ -221,9 +296,57 @@ function App() {
               dataSource={sampleTableData}
               pagination={true}
               scroll={{ x: 400 }}
+              loading={loading}
             />
           </Card>
         </Layout.Content>
+      )}
+
+      {/* //Repo Description */}
+      {selectedRepo && (
+        <Modal
+          title={
+            <>
+              <Title level={4}>
+                <a
+                  href={`https://github.com/${selectedRepoName}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {selectedRepoName}
+                </a>
+
+                {selectedRepoDescription ? (
+                  <>
+                    <br />
+                    <span style={{ fontSize: "14px", fontWeight: "normal" }}>
+                      <WechatOutlined /> {selectedRepoDescription}
+                    </span>
+                  </>
+                ) : (
+                  ""
+                )}
+              </Title>
+
+              <Divider />
+
+              <SingleRepoModal
+                selectedRepoName={selectedRepoName}
+                selectedAuthor={selectedAuthor}
+                selectedRepoStar={selectedRepoStar}
+                selectedOpenIssue={selectedOpenIssue}
+                selectedRepoWatchers={selectedRepoWatchers}
+                selectedRepoFork={selectedRepoFork}
+                selectedDefaultBranch={selectedDefaultBranch}
+                selectedRepoUpdated={selectedRepoUpdated}
+              />
+            </>
+          }
+          open={isModalOpen}
+          // onOk={handleOk}
+          onCancel={handleCancel}
+          footer={null}
+        ></Modal>
       )}
     </>
   );

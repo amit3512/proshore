@@ -25,9 +25,8 @@ export const StyledTable = styled(Table)`
 `;
 
 export const StyledSearchLayout = styled(Content)`
-  display: flex,
-  justifyContent: center,
-  textAlign: center,
-  margin: 0.9em 0 0.9em 0,
-
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 0.9em 0 0.9em 0;
 `;

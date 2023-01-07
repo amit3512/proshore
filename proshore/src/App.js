@@ -8,7 +8,7 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/" element={<AllRepositories />} />
-          <Route exact path="/repo/:id" element={<SingleRepoDetail />} />
+          {/* <Route exact path="/repo/:id" element={<SingleRepoDetail />} /> */}
         </Routes>
       </Router>
     </>
