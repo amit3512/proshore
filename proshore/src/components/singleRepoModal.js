@@ -26,13 +26,15 @@ function SingleRepoModal({ ...props }) {
           </Col>
 
           <Col span={10} offset={2}>
-            <a
-              href={`https://github.com/${props.selectedAuthor}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Text>{props.selectedAuthor}</Text>
-            </a>
+            <Text>
+              <a
+                href={`https://github.com/${props.selectedAuthor}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {props.selectedAuthor}
+              </a>
+            </Text>
           </Col>
 
           {/* open issues */}

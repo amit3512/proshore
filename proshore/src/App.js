@@ -1,6 +1,6 @@
 import AllRepositories from "./pages/searchRepo";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import SingleRepoDetail from "./components/singleRepoDetail";
+// import SingleRepoDetail from "./components/singleRepoDetail";
 
 function App() {
   return (

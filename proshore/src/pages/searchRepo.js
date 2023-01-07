@@ -22,6 +22,7 @@ import {
   FieldTimeOutlined,
   UnorderedListOutlined,
   EyeOutlined,
+  ArrowDownOutlined,
 } from "@ant-design/icons";
 
 import * as SORTER from "../utils/sorter";
@@ -213,7 +214,11 @@ function App() {
     },
 
     {
-      title: "Action",
+      title: (
+        <Text style={{ color: "white" }}>
+          <ArrowDownOutlined /> Action
+        </Text>
+      ),
       key: "action",
       align: "center",
       dataIndex: "action",
