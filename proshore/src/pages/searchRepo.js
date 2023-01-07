@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Moment from "react-moment";
 import axios from "axios";
 import {
@@ -28,15 +29,17 @@ import {
 import * as SORTER from "../utils/sorter";
 import { StyledTable, StyledSearchLayout } from "../style/tableStyle";
 import SingleRepoModal from "../components/singleRepoModal";
-
-const baseUrl = "https://api.github.com/search/repositories";
+import { getAllRepositoriesFromStore } from "../store/action/repo";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
 
 function App() {
+  const repos = useSelector((state) => state.repo?.data);
+  const dispatch = useDispatch();
+
   //states
-  const [repositories, setRepository] = useState([]);
+  // const [repositories, setRepository] = useState([]);
   const [selectedSearchedQuery, setSearchedQuery] = useState();
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,19 +55,21 @@ function App() {
   const [selectedDefaultBranch, setSelectedRepoDefaultBranch] = useState();
 
   //functions
-  async function getAllRepositories() {
-    setLoading(true);
-    const response = await axios.get(
-      `${baseUrl}?q=${selectedSearchedQuery}&per_page=300`
-    );
-    setRepository(response?.data?.items);
-    setLoading(false);
-  }
+  // async function getAllRepositories() {
+  //   setLoading(true);
+  //   const response = await axios.get(
+  //     `${baseUrl}?q=${selectedSearchedQuery}&per_page=3000`
+  //   );
+  //   setRepository(response?.data?.items);
+  //   setLoading(false);
+  // }
 
   //useEffects
   useEffect(() => {
-    setRepository();
-    getAllRepositories();
+    // setRepository();
+    // getAllRepositories();
+    setLoading(true);
+    dispatch(getAllRepositoriesFromStore(selectedSearchedQuery, setLoading));
   }, [selectedSearchedQuery]);
 
   //function variables
@@ -226,8 +231,10 @@ function App() {
   ];
 
   const sampleTableData =
-    repositories &&
-    repositories?.map((repo, index) => {
+    // repositories &&
+    // repositories?.map((repo, index) => {
+    repos &&
+    repos?.map((repo, index) => {
       return {
         sn: index + 1,
         repo_name: repo?.full_name,
