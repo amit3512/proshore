@@ -331,26 +331,24 @@ function App() {
                   ""
                 )}
               </Title>
-
-              <Divider />
-
-              <SingleRepoModal
-                selectedRepoName={selectedRepoName}
-                selectedAuthor={selectedAuthor}
-                selectedRepoStar={selectedRepoStar}
-                selectedOpenIssue={selectedOpenIssue}
-                selectedRepoWatchers={selectedRepoWatchers}
-                selectedRepoFork={selectedRepoFork}
-                selectedDefaultBranch={selectedDefaultBranch}
-                selectedRepoUpdated={selectedRepoUpdated}
-              />
             </>
           }
           open={isModalOpen}
           // onOk={handleOk}
           onCancel={handleCancel}
           footer={null}
-        ></Modal>
+        >
+          <SingleRepoModal
+            selectedRepoName={selectedRepoName}
+            selectedAuthor={selectedAuthor}
+            selectedRepoStar={selectedRepoStar}
+            selectedOpenIssue={selectedOpenIssue}
+            selectedRepoWatchers={selectedRepoWatchers}
+            selectedRepoFork={selectedRepoFork}
+            selectedDefaultBranch={selectedDefaultBranch}
+            selectedRepoUpdated={selectedRepoUpdated}
+          />
+        </Modal>
       )}
     </>
   );
