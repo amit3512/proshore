@@ -1,19 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Moment from "react-moment";
-import axios from "axios";
-import {
-  Button,
-  Card,
-  Col,
-  Divider,
-  Input,
-  Layout,
-  Modal,
-  Row,
-  Spin,
-  Typography,
-} from "antd";
+import { Button, Card, Divider, Input, Layout, Modal, Typography } from "antd";
 import {
   UserOutlined,
   StarOutlined,
@@ -30,6 +18,7 @@ import * as SORTER from "../utils/sorter";
 import { StyledTable, StyledSearchLayout } from "../style/tableStyle";
 import SingleRepoModal from "../components/singleRepoModal";
 import { getAllRepositoriesFromStore } from "../store/action/repo";
+import { gitHubUrl } from "../components/constants/urls";
 
 const { Title, Text } = Typography;
 const { Search } = Input;
@@ -69,7 +58,8 @@ function App() {
     // setRepository();
     // getAllRepositories();
     setLoading(true);
-    dispatch(getAllRepositoriesFromStore(selectedSearchedQuery, setLoading));
+    if (selectedSearchedQuery)
+      dispatch(getAllRepositoriesFromStore(selectedSearchedQuery, setLoading));
   }, [selectedSearchedQuery]);
 
   //function variables
@@ -321,7 +311,7 @@ function App() {
             <>
               <Title level={4}>
                 <a
-                  href={`https://github.com/${selectedRepoName}`}
+                  href={`${gitHubUrl}/${selectedRepoName}`}
                   target="_blank"
                   rel="noreferrer"
                 >

@@ -8,7 +8,7 @@ import {
   BranchesOutlined,
 } from "@ant-design/icons";
 import Moment from "react-moment";
-import { Link, NavLink } from "react-router-dom";
+import { gitHubUrl } from "../components/constants/urls";
 
 const { Text } = Typography;
 const { Content } = Layout;
@@ -28,7 +28,7 @@ function SingleRepoModal({ ...props }) {
           <Col span={10} offset={2}>
             <Text>
               <a
-                href={`https://github.com/${props.selectedAuthor}`}
+                href={`${gitHubUrl}/${props.selectedAuthor}`}
                 target="_blank"
                 rel="noreferrer"
               >

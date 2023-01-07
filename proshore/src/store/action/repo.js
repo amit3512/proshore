@@ -1,7 +1,7 @@
 import axios from "axios";
 import { REPO_START, REPO_SUCCESS, REPO_FAIL } from "../types";
 
-const baseUrl = "https://api.github.com/search/repositories";
+import { baseUrl } from "../../components/constants/urls";
 
 export const fetchStart = () => {
   return {
